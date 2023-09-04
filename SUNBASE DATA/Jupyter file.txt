@@ -1,0 +1,101 @@
+# %%
+#importing python library
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# %%
+#loading the dataset
+data = pd.read_csv('DATA.csv')
+
+# %%
+#printing top 5 rows of the dataset
+data.head()
+
+
+# %%
+#printing last 5 rows
+data.tail()
+
+# %%
+data.describe()
+
+# %%
+data.shape
+
+# %%
+#findinf is there any null value in the dataset
+data.isnull().sum()
+
+# %%
+data.info()
+
+# %%
+#Dropping the unwanted columns as they are not going to contribute in the output
+X = data.drop(columns=['Name','Gender','Location', 'CustomerID', 'Churn'], axis=1)
+print(X)
+
+
+# %%
+#storing the churn factor separetely as its our final output
+Y = data['Churn']
+print(Y)
+
+# %%
+#Correlation
+#establishing correlation btw all factors
+correlation = X.corr()
+
+# %%
+plt.figure(figsize=(5,5))
+sns.heatmap(correlation, cbar= True, square= True, fmt = '.1f', annot_kws= {'size' : 8}, cmap = 'Oranges' )
+
+# %%
+#splitting the dataset training and testing sets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=3)
+
+# %%
+print(Y.shape, Y_train.shape, Y_test.shape)
+
+# %%
+#loadind the model for trainning the datadet
+model = RandomForestClassifier()
+
+# %%
+
+model.fit(X_train, Y_train)
+
+# %%
+#finding the accuracy of the test model
+X_test_prediction = model.predict(X_test)
+test_data_accuracy = accuracy_score(X_test_prediction, Y_test)
+
+# %%
+print('Acuuracy : ', test_data_accuracy)
+
+# %% [markdown]
+#                            Predictive System
+
+# %%
+
+
+
+input_data = (53,12,64.49,383)
+
+input_array = np.asarray(input_data)
+
+input_reshaped = input_array.reshape(1, -1)
+
+prediction = model.predict(input_reshaped)
+print(prediction)
+
+if (prediction[0]==1):
+  print('Satisfied')
+else:
+  print('Unsatisfied')
+
+
